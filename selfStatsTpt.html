@@ -1,0 +1,53 @@
+<html lang="fr">
+  <head>
+    <title>Test SelfStats</title>
+    <meta charset="utf-8"/>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+  </head>
+  <body>
+
+    <script>
+
+      d3.csv("tpt.csv", function(d){
+        var w = 3000;
+        var h = 1500;
+
+        var canvas = d3.select("body")
+          .append("svg")
+          .attr("width",w)
+          .attr("height",h);
+
+        var heightScale = d3.scale.linear()
+          .domain([0,1500])
+          .range([0,w]);
+
+        var colorScale = d3.scale.linear()
+          .domain([0,1500])
+          .range(["blue","red"]);
+
+        canvas.selectAll("rect")
+          .data(d)
+          .enter()
+            .append("rect")
+            .attr("width",20)
+            .attr("height", 0)
+            .attr("x",h)
+            //.attr("y",h-10)
+            .transition()
+            .duration(1500)
+            .attr("height", function(o) {return heightScale(o["T1...TEMPS"]);})
+            //.attr("transform","translate(0,"this.height")")
+            //.attt("y",function(o) {return heightScale(o["T1...TEMPS"]);})
+            .attr("fill", function(o) {return colorScale(o["T1...TEMPS"]);})
+            .attr("x", function (o,i) {return i*25;});
+
+
+
+      })
+
+
+    </script>
+
+  </body>
+
+</html>

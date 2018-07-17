@@ -1,0 +1,57 @@
+<html lang="fr">
+  <head>
+    <title>Test SelfStats</title>
+    <meta charset="utf-8"/>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+  </head>
+  <body>
+
+    <script>
+
+      d3.csv("temps.csv", function(d){
+        var w = 500;
+        var h = 3000;
+
+        var canvas = d3.select("body")
+          .append("svg")
+          .attr("width",w)
+          .attr("height",h)
+          .attr("transform","translate(100,0)");
+
+        var widthScale = d3.scale.linear()
+          .domain([0,13600])
+          .range([0,w]);
+
+        var colorScale = d3.scale.linear()
+          .domain([0,13600])
+          .range(["blue","red"]);
+
+        canvas.selectAll("rect")
+          .data(d)
+          .enter()
+            .append("rect")
+            .attr("width",0)
+            .transition()
+            .duration(1500)
+            .attr("width", function (o) {return widthScale(o["Temps.en.secondes..pour.le.test.entier."]);})
+            .attr("height", 20)
+            .attr("fill", function(o) {return colorScale(o["Temps.en.secondes..pour.le.test.entier."]);})
+            .attr("y", function (o,i) {return i*25;});
+
+        canvas.selectAll("text")
+          .data(d)
+          .enter()
+            .append("text")
+            .attr("fill","black")
+            .attr("y", function(o,i) {return i*25+20;})
+            .attr("x",-90)
+            .text(function(o) {return o["X.U.FEFF.Nom"];});
+
+      })
+
+
+    </script>
+
+  </body>
+
+</html>
