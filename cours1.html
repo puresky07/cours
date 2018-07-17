@@ -272,6 +272,256 @@
 			
 			// charger le csv : pareil avec d3.csv() ;)
 			
+			
+		// PATHS
+		// HUITIÈME CONTENEUR SVG
+			
+			var canvas8 = d3.select("body")
+				.append("svg")
+				.attr("width",w)
+				.attr("height",h);
+				
+			var data8 = [
+				{x:10, y:20},
+				{x:40, y:60},
+				{x:50, y:70}
+			];
+			
+			var group = canvas8.append("g")
+				.attr("transform","translate(100,100)");
+			
+			// Générateur de ligne
+			var lineVar = d3.svg.line()
+				.x(function(d) {return d.x;})
+				.y(function(d) {return d.y;});
+			
+			group.selectAll("path")
+				.data([data8]) // c'est un Array donc []
+				.enter()
+					.append("path")
+					.attr("d", lineVar)
+					.attr("fill","none")
+					.attr("stroke","black")
+					.attr("stroke-width",10);
+			
+		// ARCS
+		// NEUVIÈME CONTENEUR SVG
+			
+			var canvas9 = d3.select("body")
+				.append("svg")
+				.attr("width",w)
+				.attr("height",h);
+			
+			var group9 = canvas9.append("g")
+				.attr("transform","translate(100,100)");
+			
+			var r = 100;
+			var p = Math.PI * 2;
+			
+			// Générateur d'arc de cercle
+			var arc = d3.svg.arc()
+				.innerRadius(r-20)
+				.outerRadius(r)
+				.startAngle(0)
+				.endAngle(p-1); //  p pour avoir le cercle entier
+				
+			group9.append("path")
+				.attr("d",arc);
+			
+		// DIXIÈME CONTENEUR SVG
+			
+			var canvas10 = d3.select("body")
+				.append("svg")
+				.attr("width",1500)
+				.attr("height",1500);
+			
+			var data10 = [10,50,80];
+			var r = 300;
+			
+			var colorScale = d3.scale.ordinal() //input is not quantitive (ça peut être des mots par ex.)
+				.range(["red","blue","orange"]);
+			
+			var group10 = canvas10.append("g")
+				.attr("transform","translate(300,300)");
+			
+			// arc path generator
+			var arc10 = d3.svg.arc()
+				.innerRadius(200) // 0 pour avoir un gâteau
+				.outerRadius(r);
+			
+			// pie layout
+			var pie = d3.layout.pie()
+				.value(function(d) {return d;});
+		
+			var arcs = group10.selectAll(".arc")
+				.data(pie(data10))
+				.enter()
+					.append("g")
+					.attr("class","arc");
+			
+			// now we need to attend a path to our objects
+			arcs.append("path")
+				.attr("d", arc10)
+				.attr("fill", function(d) {return colorScale(d.data);}); // data étant une des propriétés générées par colorScale
+		
+			// Text
+			arcs.append("text")
+				.attr("transform", function(d) {return "translate("+arc10.centroid(d)+")" ;}) // centroid permet de récupérer le centre de l'arc de cercle
+				.attr("text-anchor","middle") // c'est mieux comme ça
+				.attr("font-size","1.5em")
+				.text(function(d) {return d.data;});
+		
+		
+		// TREE LAYOUT
+		// ONZIÈME CONTENEUR SVG
+			
+			// path reliant deux points
+			var canvas11 = d3.select("body")
+				.append("svg")
+				.attr("width", 500)
+				.attr("height",500);
+			
+			var diagonal = d3.svg.diagonal()
+				.source({x:10, y:10}) // point de départ
+				.target({x:300, y:300});
+			
+			canvas11.append("path")
+				.attr("fill","none")
+				.attr("stroke","black")
+				.attr("d",diagonal);
+			
+		// DOUZIÈME CONTENEUR SVG
+			
+			// Création de l'arbre :)
+			var canvas12 = d3.select("body")
+				.append("svg")
+				.attr("width", 500)
+				.attr("height",500)
+				.append("g")
+					.attr("transform","translate(50,50)");
+			
+			// layout = tree
+			var tree = d3.layout.cluster() // tree() ou cluster()
+				.size([400,400])
+				
+			// load data
+			d3.json("famille.json", function(data){
+				var nodes = tree.nodes(data);
+				//console.log(nodes); // affiche tous les nœuds
+				var links = tree.links(nodes);
+				//console.log(links); // affiche tous les liens (deux propirétés : source et target)
+				
+				var node = canvas12.selectAll(".node")
+					.data(nodes)
+					.enter()
+						.append("g")
+						.attr("class","node")
+						.attr("transform",function(d) {return "translate("+d.y+","+d.x+")";}); // inverser x et y pour tree vertical
+				
+				node.append("circle")
+					.attr("r",5)
+					.attr("fill","steelblue");
+				
+				node.append("text")
+					.text(function(d) {return d.name;});
+				
+				var diagonal12 = d3.svg.diagonal()
+					.projection(function(d) {return [d.y, d.x];}); // inverser x et y pour tree vertical
+				
+				canvas12.selectAll(".link")
+					.data(links)
+					.enter()
+						.append("path")
+						.attr("class","link")
+						.attr("fill","none")
+						.attr("stroke","#ADADAD")
+						.attr("d",diagonal12);
+				
+			});
+			
+			
+		// CLUSTER LAYOUT (toutes les feuilles sont alignées)
+		
+			// changer tree() en cluster() ci-dessus. Rien d'autre ne change ;)
+		
+		// PACK LAYOUT
+		// TREIZIÈME CONTENEUR SVG
+			var ww = 800;
+			var hh = 600;
+			
+			var canvas13 = d3.select("body")
+				.append("svg")
+				.attr("width",ww)
+				.attr("height",hh)
+				.append("g")
+					.attr("transform","translate(50,50)");
+			
+			var pack = d3.layout.pack()
+				.size([ww,hh-50])
+				.padding(10);
+				
+			d3.json("famille.json", function(data) {
+				
+				var nodes = pack.nodes(data); // prop disponibles : depth, name, r, value, x, y
+				//console.log(nodes);
+				
+				var node = canvas13.selectAll(".node13")
+					.data(nodes)
+					.enter()
+						.append("g")
+						.attr("class","node13")
+						.attr("transform", function(d) {return "translate("+d.x+","+d.y+")";});
+				
+				node.append("circle")
+					.attr("r", function(d) {return d.r;})
+					.attr("fill","steelblue")
+					.attr("opacity",0.25)
+					.attr("stroke","#ADADAD")
+					.attr("stroke-width",2);
+				
+				node.append("text")
+					.text(function(d) {return d.children ? "" : d.name ;}); // forme courte pour If : si le nœud a un children, alors rien, sinon mettre d.name
+			
+			});
+			
+		// BUBBLE LAYOUT
+		// QUATORZIÈME CONTENEUR SVG
+			
+			var canvas14 = d3.select("body")
+				.append("svg")
+				.attr("width",ww)
+				.attr("height",hh)
+				.append("g")
+					.attr("transform","translate(50,50)");
+			
+			var pack = d3.layout.pack()
+				.size([ww,hh-50])
+				.padding(10);
+				
+			d3.json("famille2.json", function(data) {
+				
+				var nodes = pack.nodes(data); // prop disponibles : depth, name, r, value, x, y
+				//console.log(nodes);
+				
+				var node = canvas14.selectAll(".node14")
+					.data(nodes)
+					.enter()
+						.append("g")
+						.attr("class","node14")
+						.attr("transform", function(d) {return "translate("+d.x+","+d.y+")";});
+				
+				node.append("circle")
+					.attr("r", function(d) {return d.r;})
+					.attr("fill", function(d) {return d.children ? "#ffffff" : "steelblue";})
+					.attr("opacity",0.25)
+					.attr("stroke", function(d) {return d.children ? "#ffffff" : "#ADADAD";})
+					.attr("stroke-width",2);
+				
+				node.append("text")
+					.text(function(d) {return d.children ? "" : d.name ;}); // forme courte pour If : si le nœud a un children, alors rien, sinon mettre d.name
+			
+			});
+		
 		</script>
 	
 	

@@ -1,0 +1,27 @@
+{
+"name":"Édouard",
+"value":100,
+	"children": [
+		{
+			"name":"Sylvia",
+			"value":75,
+			"children": [
+				{"name":"Alix", "value":25},
+				{"name":"Igor", "value":25},
+				{"name":"Andrée", "value":25}
+			]
+		},
+		{
+			"name":"Jean-Claude",
+			"value":75,
+			"children": [
+				{"name":"Alix", "value":25},
+				{"name":"Amandine", "value":25}
+			]
+		},
+		{
+			"name":"Mr. X",
+			"value":75
+		}
+	]
+}

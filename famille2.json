@@ -1,0 +1,14 @@
+{
+	"name":"Jean",
+	"value":100,
+	"children": [
+		{ "name":"Edmond","value":100 },
+		{ "name":"Edmond","value":125 },
+		{ "name":"Edmond","value":50 },
+		{ "name":"Edmond","value":78 },
+		{ "name":"Edmond","value":24 },
+		{ "name":"Edmond","value":210 },
+		{ "name":"Edmond","value":140 },
+		{ "name":"Edmond","value":90 }
+	]
+}
