@@ -1,0 +1,28 @@
+<html lang="fr">
+  <head>
+    <title>Test SelfStats</title>
+    <meta charset="utf-8"/>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+  </head>
+  <body>
+
+    <script>
+
+      var data = d3.csv("self_export-test_299-session390-29-06-2018_14_52_37.csv", function(d){
+        console.log(d);
+        var headers = d3.keys(d[0]);
+        console.log(headers);
+
+        var andrea = d3.keys(d[15]);
+        console.log(andrea);
+
+      });
+
+
+
+
+    </script>
+
+  </body>
+
+</html>

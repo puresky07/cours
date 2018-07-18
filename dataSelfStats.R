@@ -16,3 +16,6 @@ write.csv(temps, file = "temps.csv")
 library(dplyr)
 tpt <- c(data[1],data[2],data[8],select(data, ends_with("TEMPS")))
 write.csv(tpt, file = "tpt.csv")
+
+andrea <- data[16,]
+write.csv(andrea, file = "andrea.csv")

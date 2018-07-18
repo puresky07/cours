@@ -1,0 +1,79 @@
+<html lang="fr">
+  <head>
+    <title>Test SelfStats</title>
+    <meta charset="utf-8"/>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+  </head>
+  <body>
+
+    <script>
+
+      d3.csv("self_export-test_299-session390-29-06-2018_14_52_37.csv", function(d){
+        var w = 500,
+            h = 500,
+            padding = 50;
+
+        console.log(d);
+        var map = d.map(function(i) {return parseInt(i["Score total obtenu dans le test (formule du total)"]);});
+        console.log(map);
+
+        var histogram = d3.layout.histogram()
+          .bins(8)
+          (map)
+        console.log(histogram);
+
+        var yScale = d3.scale.linear()
+          .domain([0, d3.max(histogram.map(function(i) {return i.length;})) ])
+          .range([0,h]);
+
+        var xScale = d3.scale.linear()
+          .domain([0, d3.max(map)])
+          .range([0,w]);
+
+        var xAxis = d3.svg.axis()
+          .scale(xScale)
+          .ticks(9)
+          .orient("bottom");
+
+        var canvas = d3.select("body")
+          .append("svg")
+          .attr("width",w)
+          .attr("height",h + padding)
+          .append("g")
+            .attr("transform","translate(10,0)");
+
+        var group = canvas.append("g")
+          .attr("transform", "translate(0,"+ h +")")
+          .call(xAxis);
+
+        var bars = canvas.selectAll(".bar")
+          .data(histogram)
+          .enter()
+          .append("g");
+
+        bars.append("rect")
+            .attr("x", function(o){return xScale(o.x) ;})
+            .attr("y", function(o){return h - yScale(o.y);})
+            .attr("width", function(o){return xScale(o.dx) ;})
+            .attr("height", function(o){return yScale(o.y) ;})
+            .attr("fill","steelblue");
+
+        bars.append("text")
+          .attr("x", function(o){return xScale(o.x);})
+          .attr("y", function(o){return 500 - yScale(o.y);})
+          .attr("dy", "20px") // déplace vers le bas
+          .attr("dx", function(o){return xScale(o.dx)/2;}) // met au milieu de la barre
+          .attr("fill", "white")
+          .attr("text-anchor","middle")
+          .text(function(o) {return o.y;});
+
+
+
+      })
+
+
+    </script>
+
+  </body>
+
+</html>
