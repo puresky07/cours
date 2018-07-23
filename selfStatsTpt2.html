@@ -1,7 +1,6 @@
 <html lang="fr">
   <head>
     <title>Test SelfStats</title>
-<<<<<<< HEAD
     <meta charset="utf-8"/>   
 	<link rel="stylesheet" type="text/css" href='./css/bootstrap.min.css'>
     <!--<script src="http://d3js.org/d3.v3.min.js"></script>-->
@@ -9,14 +8,6 @@
   </head>
   <body>
 
-
-=======
-    <meta charset="utf-8"/>
-    <script src="http://d3js.org/d3.v3.min.js"></script>
-  </head>
-  <body>
-
->>>>>>> 061a042ec1bffebcfdd55931243c0fdf6df51c10
     <script>
 
       d3.csv("self_export-test_299-session390-29-06-2018_14_52_37.csv", function(d){
@@ -64,7 +55,6 @@
 
         bars.append("rect")
             .attr("x", function(o){return xScale(o.x) ;})
-<<<<<<< HEAD
             .attr("y", h)
             .attr("height",0)
             .attr("fill","steelblue")
@@ -74,12 +64,7 @@
             .attr("height", function(o){return yScale(o.y) ;})
             .attr("y", function(o){return h - yScale(o.y);})
             ;
-=======
-            .attr("y", function(o){return h - yScale(o.y);})
-            .attr("width", function(o){return xScale(o.dx) ;})
-            .attr("height", function(o){return yScale(o.y) ;})
-            .attr("fill","steelblue");
->>>>>>> 061a042ec1bffebcfdd55931243c0fdf6df51c10
+
 
         bars.append("text")
           .attr("x", function(o){return xScale(o.x);})
@@ -97,10 +82,7 @@
 
     </script>
 
-<<<<<<< HEAD
 
-=======
->>>>>>> 061a042ec1bffebcfdd55931243c0fdf6df51c10
   </body>
 
 </html>

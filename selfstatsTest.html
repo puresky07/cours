@@ -2,18 +2,14 @@
   <head>
     <title>Test SelfStats</title>
     <meta charset="utf-8"/>
-<<<<<<< HEAD
     <!--<script src="http://d3js.org/d3.v3.min.js"></script>-->
 	<script src="js/d3.v3.min.js"></script>
-=======
     <script src="http://d3js.org/d3.v3.min.js"></script>
->>>>>>> 061a042ec1bffebcfdd55931243c0fdf6df51c10
   </head>
   <body>
 
     <script>
 
-<<<<<<< HEAD
       d3.csv("self_export-test_299-session390-29-06-2018_14_52_37.csv", function(d){
         var w = 600;
         var h = 3000;
@@ -21,16 +17,11 @@
         
         var mapTemps = d.map(function(i){return parseInt(i["Temps en secondes (pour le test entier)"]);});
         console.log(mapTemps);
-=======
-      d3.csv("temps.csv", function(d){
-        var w = 500;
-        var h = 3000;
->>>>>>> 061a042ec1bffebcfdd55931243c0fdf6df51c10
+
 
         var canvas = d3.select("body")
           .append("svg")
           .attr("width",w)
-<<<<<<< HEAD
           .attr("height",h);
 
         var widthScale = d3.scale.linear()
@@ -66,20 +57,11 @@
             	.duration(1500)
             	.attr("x",function (o) {return decal+widthScale(o)+5;});
 
-	canvas.selectAll(".nom")
-=======
+	/*canvas.selectAll(".nom")
           .attr("height",h)
-          .attr("transform","translate(100,0)");
+          .attr("transform","translate(100,0)");*/
 
-        var widthScale = d3.scale.linear()
-          .domain([0,13600])
-          .range([0,w]);
-
-        var colorScale = d3.scale.linear()
-          .domain([0,13600])
-          .range(["blue","red"]);
-
-        canvas.selectAll("rect")
+       /* canvas.selectAll("rect")
           .data(d)
           .enter()
             .append("rect")
@@ -89,27 +71,19 @@
             .attr("width", function (o) {return widthScale(o["Temps.en.secondes..pour.le.test.entier."]);})
             .attr("height", 20)
             .attr("fill", function(o) {return colorScale(o["Temps.en.secondes..pour.le.test.entier."]);})
-            .attr("y", function (o,i) {return i*25;});
+            .attr("y", function (o,i) {return i*25;});*/
 
-        canvas.selectAll("text")
->>>>>>> 061a042ec1bffebcfdd55931243c0fdf6df51c10
+        canvas.selectAll(".nom")
           .data(d)
           .enter()
             .append("text")
             .attr("fill","black")
-<<<<<<< HEAD
             .attr("y", function(o,i) {return i*25+15;})
             .attr("x",0)
             //.attr("transform","translate(-"+string.length(function(o) {return o["Prénom"]+" "+o["Nom"];})+",0)")
             // afficher en fonction de la longueur du nom (str.length(prénom+nom))
             .text(function(o) {return o["Prénom"]+" "+o["Nom"];});
-	
-=======
-            .attr("y", function(o,i) {return i*25+20;})
-            .attr("x",-90)
-            .text(function(o) {return o["X.U.FEFF.Nom"];});
 
->>>>>>> 061a042ec1bffebcfdd55931243c0fdf6df51c10
       })
 
 
