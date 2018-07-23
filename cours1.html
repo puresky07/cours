@@ -1,0 +1,619 @@
+<html lang="fr">
+	<head>
+		<title>Première page de cours</title>
+		<!--<script src="http://d3js.org/d3.v3.min.js"></script>-->
+		<script src="js/d3.v3.min.js"></script>
+		<meta charset="utf-8"/>
+	
+	</head>
+	<body>
+	
+		<p>Voici un petit paragraphe.</p>
+		
+		
+		<script> // SOURCE : https://www.youtube.com/watch?v=H3WsXg622WA
+		
+			// modifier objet text
+			d3.select("p")
+				.text("J'ai remplacé le texte ! Mwahaha.");
+			
+			// ajouter objet text
+			d3.select("p")
+				.append("p")
+				.text("Je rajoute un titre ici"); // là je vois pas trop la différence
+			d3.select("body")
+				.append("p")
+				.text("Encore un paragraphe");
+			
+			// Changer le style d'un objet
+			d3.select("p")
+				.style("color","red");
+			
+			// console : affichage de l'objet (d3) et toutes les fonctions associées
+			console.log(d3);
+			
+		// PREMIER CONTENEUR SVG
+			// il vaut mieux l'assigner à une variable
+			var canvas = d3.select("body")
+				.append("svg")
+				.attr("width",500)
+				.attr("height",500)
+				
+			// Création rectangle background
+			var rect = canvas.append("rect")
+				.attr("width",500)
+				.attr("height",500)
+				.attr("fill","#fffccc");
+				
+			// Création d'un cercle
+			var circle = canvas.append("circle")
+				.attr("cx",250)
+				.attr("cy",250)
+				.attr("r",50)
+				.attr("fill","red");
+			
+			// Création d'une ligne
+			var line = canvas.append("line")
+				.attr("x1",0)
+				.attr("y1",0)
+				.attr("x2",500)
+				.attr("y2",500)
+				.attr("stroke","green")
+				.attr("stroke-width",5);
+				
+		// SECOND CONTENEUR SVG
+			var w = 500;
+			var h = 500;
+			
+			var dataarea = d3.select("body")
+				.append("svg")
+				.attr("width",w)
+				.attr("height",h)
+				.attr("transform", "translate(0,10)");
+			
+			// Création rectangle background (on l'appelle bg)
+			//var bg = dataarea.append("rect")
+			//	.attr("width",w)
+			//	.attr("height",h)
+			//	.attr("fill","#fffccc");
+			
+			// Work on dataset
+			var dataArray = [20,40,50];
+			
+			// on sélecte ALL les rectangle qui n'existent pas encore !
+			var bars = dataarea.selectAll("rect")
+				.data(dataArray) //où on récupère les data
+				.enter() // place tous les objets qui ne sont pas encore sur la page
+					.append("rect")
+					.attr("width",function(d) {return d*10;}) // on multiplie par 10 pour voir un peu mieux
+					.attr("height",50)
+					.attr("fill","blue")
+					.attr("y", function(d,i) {return i*100 }); // i = index ; permet qu'il ne s'affichent pas tous l'un sur l'autre. À chaque valeur (i) on décale de i*100px
+			
+		// COMMENT GÉRER LA TAILLE DES BARS AUTOMATIQUEMENT PAR RAPPORT À LA TAILLE DU SVG ?
+		// TROISIÈME CONTENEUR SVG
+			var zone = d3.select("body")
+				.append("svg")
+				.attr("width",w)
+				.attr("height",h)
+				.attr("transform", "translate(0,10)");
+			
+			var dataArray2 = [20,40,50,60];
+			// on veut récupérer la plus grande valeur
+			// donc on crée une var de scale
+			var widthScale = d3.scale.linear() // linear est un type de scale qui nous va bien ici
+				.domain([0,60]) // min et max de notre dataSet
+				.range([0,w]); // min et max souhaités
+			
+			// pour se marrer on va faire aussi une scale de couleur
+			var colorScale = d3.scale.linear()
+				.domain([0,60])
+				.range(["red","blue"]);
+			
+			
+			var bars = zone.selectAll("rect")
+				.data(dataArray2)
+				.enter()
+					.append("rect")
+					.attr("width", function(d) {return widthScale(d);}) 
+					.attr("height",50)
+					.attr("fill", function(d) {return colorScale(d);})
+					.attr("y", function(d,i) {return i*60 });
+			
+			
+			
+			
+			// COMMENT GROUPER DES SVG
+		// QUATRIÈME CONTENEUR
+			var w = 1000;
+				
+			var graph = d3.select("body")
+				.append("svg")
+				.attr("width",w)
+				.attr("height",h)
+				.append("g") // on crée un groupe g
+				.attr("transform","translate(100,0)");
+			
+			var dataArray3 = [20,40,50,60];
+			var widthScale = d3.scale.linear()
+				.domain([0,60])
+				.range([0,500]);
+			
+			var colorScale = d3.scale.linear()
+				.domain([0,60])
+				.range(["red","blue"]);
+			
+			var bars = graph.selectAll("rect")
+				.data(dataArray3)
+				.enter()
+					.append("rect")
+					.attr("width", function(d) {return widthScale(d);}) 
+					.attr("height",50)
+					.attr("fill", function(d) {return colorScale(d);})
+					.attr("y", function(d,i) {return i*60 });
+			
+			
+			
+			// COMMENT AJOUTER UN AXE
+			var axis = d3.svg.axis() // CREATE AXIS !
+				.ticks(6)
+				.scale(widthScale); // define scale
+				
+			graph.append("g") // Il faut créer un nouveau groupe
+				.attr("transform","translate(0,250)") // on décale où on veut
+				.call(axis); // on call the axis
+		
+		// UPDATE DATASET
+		// CINQUIÈME CONTENEUR SVG
+			var dynam = d3.select("body")
+				.append("svg")
+				.attr("width",w)
+				.attr("height",h);
+			
+			var data = [10,20,30,40];
+			
+			// On commence par avoir un cercle déjà existant sur la page
+			var circle = dynam.append("circle")
+				.attr("cx",50)
+				.attr("cy",50)
+				.attr("r",30);
+			
+			var circle2 = dynam.append("circle")
+				.attr("cx",150)
+				.attr("cy",50)
+				.attr("r",30);
+			
+			var circle = dynam.selectAll("circle") // sélection tous les circles de la page
+				.data(data)
+				.attr("fill","red") // il met en rouge ceux qui sont déjà existants, pour le nombre de valeurs qu'on a dans data (si y en a plus sur la page ils seront pas colorés)
+				.enter()
+					.append("circle")
+					.attr("cx",50)
+					.attr("cy",function(d,i) {return 50+i*70})
+					.attr("r",30)
+					.attr("fill","green");
+			
+			// .enter (moins d'éléments déjà existant que de data)
+			// .exit (moins de data que d'éléments existants)
+			// .update (même nbr d'éléments et de data)
+			
+		// TRANSITIONS
+		// SIXIÈME CONTENEUR SVG
+			var move = d3.select("body")
+				.append("svg")
+				.attr("width",w)
+				.attr("height",h);
+			
+			var circle = move.append("circle")
+				.attr("cx",50)
+				.attr("cy",50)
+				.attr("r",30);
+			
+			// on veut bouger ce cercle sur la droite + d'autres trucs
+			circle.transition()
+				.delay(2000)
+				.duration(1500)
+				.attr("cx",150)
+				.attr("cy",150)
+				.attr("r",50)
+				.attr("fill","brown")
+				.transition()
+					.delay(8000)
+					.duration(4000)
+					.attr("fill","green");;
+				
+			var rect = move.append("rect")
+				.attr("x",200)
+				.attr("y",50)
+				.attr("width",100)
+				.attr("height",50);
+			
+			rect.transition()
+				.delay(3000)
+				.duration(1500)
+				.attr("y",125)
+				.transition()
+					.duration(1500)
+					.attr("fill","green")
+					.transition()
+						.duration(1500)
+						.attr("x",100)
+						.each("end",function() {d3.select(this).attr("width",0)}); // each : listener de "end"(of transition), lorsque la transition est terminée, la fonction est exécutée
+			
+		// IMPORT EXTERNAL DATA
+		// SEPTIÈME CONTENEUR SVG
+			// files : mydata.csv & mydata.json
+			
+			// charger les données json
+			d3.json("mydata.json", function(k) { // function callback
+				var canba = d3.select("body")
+					.append("svg")
+					.attr("width",500)
+					.attr("height",500);
+				
+				canba.selectAll("rect")
+					.data(k)
+					.enter()
+						.append("rect")
+						.attr("width", function(l) {return l.age * 10;}) // on appelle la colonne souhaitée en précisant le nom .age
+						.attr("height",50)
+						.attr("y", function(l,i) {return i*60;})
+						.attr("fill","blue");
+				
+				canba.selectAll("text")
+					.data(k)
+					.enter()
+						.append("text")
+						.attr("fill","white")
+						.attr("y", function(l,i) {return i*60+30;})
+						.attr("x", 10)
+						.text(function(l) {return l.name;});
+			
+			})
+			
+			// charger le csv : pareil avec d3.csv() ;)
+			
+			
+		// PATHS
+		// HUITIÈME CONTENEUR SVG
+			
+			var canvas8 = d3.select("body")
+				.append("svg")
+				.attr("width",w)
+				.attr("height",h);
+				
+			var data8 = [
+				{x:10, y:20},
+				{x:40, y:60},
+				{x:50, y:70}
+			];
+			
+			var group = canvas8.append("g")
+				.attr("transform","translate(100,100)");
+			
+			// Générateur de ligne
+			var lineVar = d3.svg.line()
+				.x(function(d) {return d.x;})
+				.y(function(d) {return d.y;});
+			
+			group.selectAll("path")
+				.data([data8]) // c'est un Array donc []
+				.enter()
+					.append("path")
+					.attr("d", lineVar)
+					.attr("fill","none")
+					.attr("stroke","black")
+					.attr("stroke-width",10);
+			
+		// ARCS
+		// NEUVIÈME CONTENEUR SVG
+			
+			var canvas9 = d3.select("body")
+				.append("svg")
+				.attr("width",w)
+				.attr("height",h);
+			
+			var group9 = canvas9.append("g")
+				.attr("transform","translate(100,100)");
+			
+			var r = 100;
+			var p = Math.PI * 2;
+			
+			// Générateur d'arc de cercle
+			var arc = d3.svg.arc()
+				.innerRadius(r-20)
+				.outerRadius(r)
+				.startAngle(0)
+				.endAngle(p-1); //  p pour avoir le cercle entier
+				
+			group9.append("path")
+				.attr("d",arc);
+			
+		// DIXIÈME CONTENEUR SVG
+			
+			var canvas10 = d3.select("body")
+				.append("svg")
+				.attr("width",1500)
+				.attr("height",1500);
+			
+			var data10 = [10,50,80];
+			var r = 300;
+			
+			var colorScale = d3.scale.ordinal() //input is not quantitive (ça peut être des mots par ex.)
+				.range(["red","blue","orange"]);
+			
+			var group10 = canvas10.append("g")
+				.attr("transform","translate(300,300)");
+			
+			// arc path generator
+			var arc10 = d3.svg.arc()
+				.innerRadius(200) // 0 pour avoir un gâteau
+				.outerRadius(r);
+			
+			// pie layout
+			var pie = d3.layout.pie()
+				.value(function(d) {return d;});
+		
+			var arcs = group10.selectAll(".arc")
+				.data(pie(data10))
+				.enter()
+					.append("g")
+					.attr("class","arc");
+			
+			// now we need to attend a path to our objects
+			arcs.append("path")
+				.attr("d", arc10)
+				.attr("fill", function(d) {return colorScale(d.data);}); // data étant une des propriétés générées par colorScale
+		
+			// Text
+			arcs.append("text")
+				.attr("transform", function(d) {return "translate("+arc10.centroid(d)+")" ;}) // centroid permet de récupérer le centre de l'arc de cercle
+				.attr("text-anchor","middle") // c'est mieux comme ça
+				.attr("font-size","1.5em")
+				.text(function(d) {return d.data;});
+		
+		
+		// TREE LAYOUT
+		// ONZIÈME CONTENEUR SVG
+			
+			// path reliant deux points
+			var canvas11 = d3.select("body")
+				.append("svg")
+				.attr("width", 500)
+				.attr("height",500);
+			
+			var diagonal = d3.svg.diagonal()
+				.source({x:10, y:10}) // point de départ
+				.target({x:300, y:300});
+			
+			canvas11.append("path")
+				.attr("fill","none")
+				.attr("stroke","black")
+				.attr("d",diagonal);
+			
+		// DOUZIÈME CONTENEUR SVG
+			
+			// Création de l'arbre :)
+			var canvas12 = d3.select("body")
+				.append("svg")
+				.attr("width", 500)
+				.attr("height",500)
+				.append("g")
+					.attr("transform","translate(50,50)");
+			
+			// layout = tree
+			var tree = d3.layout.cluster() // tree() ou cluster()
+				.size([400,400])
+				
+			// load data
+			d3.json("famille.json", function(data){
+				var nodes = tree.nodes(data);
+				//console.log(nodes); // affiche tous les nœuds
+				var links = tree.links(nodes);
+				//console.log(links); // affiche tous les liens (deux propirétés : source et target)
+				
+				var node = canvas12.selectAll(".node")
+					.data(nodes)
+					.enter()
+						.append("g")
+						.attr("class","node")
+						.attr("transform",function(d) {return "translate("+d.y+","+d.x+")";}); // inverser x et y pour tree vertical
+				
+				node.append("circle")
+					.attr("r",5)
+					.attr("fill","steelblue");
+				
+				node.append("text")
+					.text(function(d) {return d.name;});
+				
+				var diagonal12 = d3.svg.diagonal()
+					.projection(function(d) {return [d.y, d.x];}); // inverser x et y pour tree vertical
+				
+				canvas12.selectAll(".link")
+					.data(links)
+					.enter()
+						.append("path")
+						.attr("class","link")
+						.attr("fill","none")
+						.attr("stroke","#ADADAD")
+						.attr("d",diagonal12);
+				
+			});
+			
+			
+		// CLUSTER LAYOUT (toutes les feuilles sont alignées)
+		
+			// changer tree() en cluster() ci-dessus. Rien d'autre ne change ;)
+		
+		// PACK LAYOUT
+		// TREIZIÈME CONTENEUR SVG
+			var ww = 800;
+			var hh = 600;
+			
+			var canvas13 = d3.select("body")
+				.append("svg")
+				.attr("width",ww)
+				.attr("height",hh)
+				.append("g")
+					.attr("transform","translate(50,50)");
+			
+			var pack = d3.layout.pack()
+				.size([ww,hh-50])
+				.padding(10);
+				
+			d3.json("famille.json", function(data) {
+				
+				var nodes = pack.nodes(data); // prop disponibles : depth, name, r, value, x, y
+				//console.log(nodes);
+				
+				var node = canvas13.selectAll(".node13")
+					.data(nodes)
+					.enter()
+						.append("g")
+						.attr("class","node13")
+						.attr("transform", function(d) {return "translate("+d.x+","+d.y+")";});
+				
+				node.append("circle")
+					.attr("r", function(d) {return d.r;})
+					.attr("fill","steelblue")
+					.attr("opacity",0.25)
+					.attr("stroke","#ADADAD")
+					.attr("stroke-width",2);
+				
+				node.append("text")
+					.text(function(d) {return d.children ? "" : d.name ;}); // forme courte pour If : si le nœud a un children, alors rien, sinon mettre d.name
+			
+			});
+			
+		// BUBBLE LAYOUT
+		// QUATORZIÈME CONTENEUR SVG
+			
+			var canvas14 = d3.select("body")
+				.append("svg")
+				.attr("width",ww)
+				.attr("height",hh)
+				.append("g")
+					.attr("transform","translate(50,50)");
+			
+			var pack = d3.layout.pack()
+				.size([ww,hh-50])
+				.padding(10);
+				
+			d3.json("famille2.json", function(data) {
+				
+				var nodes = pack.nodes(data); // prop disponibles : depth, name, r, value, x, y
+				//console.log(nodes);
+				
+				var node = canvas14.selectAll(".node14")
+					.data(nodes)
+					.enter()
+						.append("g")
+						.attr("class","node14")
+						.attr("transform", function(d) {return "translate("+d.x+","+d.y+")";});
+				
+				node.append("circle")
+					.attr("r", function(d) {return d.r;})
+					.attr("fill", function(d) {return d.children ? "#ffffff" : "steelblue";})
+					.attr("opacity",0.25)
+					.attr("stroke", function(d) {return d.children ? "#ffffff" : "#ADADAD";})
+					.attr("stroke-width",2);
+				
+				node.append("text")
+					.text(function(d) {return d.children ? "" : d.name ;}); // forme courte pour If : si le nœud a un children, alors rien, sinon mettre d.name
+			
+			});
+			
+			
+		// HISTOGRAM
+		// QUINZIÈME CONTENEUR SVG
+		
+			var w = 500,
+			    h = 500,
+			    padding = 50;	
+	
+			d3.csv("ages.csv", function(data) {
+				console.log(data);
+				
+				// on veut récupérer une colonne de donnée dans le fichier (l'age)
+				var map = data.map(function(i){return parseInt(i.age);}) //parsInt() pour convertir en entiers
+				console.log(map);
+				
+				// construction de l'histogramme
+				var histogram = d3.layout.histogram()
+					.bins(8) //nombre de barres
+					(map)
+				console.log(histogram);
+					// dx = width of bar
+					// length = nb de data dans une bar
+				
+				var yScale = d3.scale.linear()
+					.domain([0, d3.max(histogram.map(function(i){return i.length;}))])
+					.range([0,h]);
+					
+				var xScale = d3.scale.linear()
+					.domain([0, d3.max(map)]) //récup le max des âges, dans notre map (col des ages uniquement)
+					.range([0,w]);
+					
+				var xAx = d3.svg.axis()
+					.scale(xScale)
+					.orient("bottom");
+				
+				var canvas15 = d3.select("body")
+					.append("svg")
+					.attr("width",w)
+					.attr("height",h+padding);
+					
+				var bars15 = canvas15.selectAll(".bar15")
+					.data(histogram)
+					.enter()
+					.append("g");
+				
+				bars15.append("rect")
+					.attr("x", function(d){return xScale(d.x); })// attention par défaut affichage depuis côté haut-gauche de l'écran)
+					.attr("y", 0)
+					.attr("width", function(d){return xScale(d.dx); })
+					.attr("height", function(d){return yScale(d.y); })
+					.attr("fill", "steelblue");
+					
+				// flip over  → .attr("y", function(d){return 500 - yScale(d.y);} ) //affichage depuis 500px en bas moins la hauteur de la bar.		
+				var canvas16 = d3.select("body")
+					.append("svg")
+					.attr("width",w+20)
+					.attr("height",h+padding)
+					.append("g")
+						.attr("transform","translate(20,0)");
+					
+				var group16 = canvas16.append("g")
+					.attr("transform","translate(10,"+ h +")")
+					.call(xAx);
+					
+				var bars16 = canvas16.selectAll(".bar16")
+					.data(histogram)
+					.enter()
+					.append("g");
+				
+				bars16.append("rect")
+					.attr("x", function(d){return xScale(d.x); })// attention par défaut affichage depuis côté haut-gauche de l'écran)
+					.attr("y", function(d){return 500 - yScale(d.y);} ) //affichage depuis 500px en bas moins la hauteur de la bar.
+					.attr("width", function(d){return xScale(d.dx); })
+					.attr("height", function(d){return yScale(d.y); })
+					.attr("fill", "steelblue");
+				bars16.append("text")
+					.attr("x", function(d) {return xScale(d.x);})
+					.attr("y", function(d) {return 500 - yScale(d.y);})
+					.attr("dy","20px") // décalage y
+					.attr("dx", function(d) {return xScale(d.dx)/2;}) // décalage x
+					.attr("fill","white")
+					.attr("text-anchor","middle")
+					.text(function(d) {return d.y});
+				
+			
+			});
+		
+		</script>
+	
+	
+	</body>
+
+
+</html>

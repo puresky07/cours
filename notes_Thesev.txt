@@ -1,0 +1,28 @@
+« J'ENTENDS ET J'OUBLIE. JE VOIS ET JE ME SOUVIENS.
+JE FAIS ET JE COMPRENDS » (CONFUCIUS).
+
+
+DESCRIPTIF PROJET :
+
+
+
+LIENS / INFOS INTERESSANTES :
+
+- Projet HubbleLearn - elearning traces observatory
+http://hubblelearn.imag.fr/?lang=fr
+
+- Cédric d'Ham - projet LabNBook (plateforme collaborative scientifique UGA)
+https://labnbook.fr/page-perso-cedric-d-ham/
+
+- Denis Bouhineau (LIG) : http://lig-membres.imag.fr/denisb/
+
+LIG - METAH - Modèles et Technologies pour l'Apprentissage Humain
+http://metah.imag.fr/
+
+
+RESSOURCES :
+
+- three.js (visualisation 3D interactive)
+https://threejs.org/examples/#webgl_decals	(structure 3D complexe)
+https://threejs.org/examples/#webgl_materials_lightmap	(boites sur plan 3D)
+(voxels painter : https://threejs.org/examples/#webgl_interactive_voxelpainter) just for fun

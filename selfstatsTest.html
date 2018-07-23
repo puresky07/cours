@@ -1,0 +1,76 @@
+<html lang="fr">
+  <head>
+    <title>Test SelfStats</title>
+    <meta charset="utf-8"/>
+    <!--<script src="http://d3js.org/d3.v3.min.js"></script>-->
+	<script src="js/d3.v3.min.js"></script>
+  </head>
+  <body>
+
+    <script>
+
+      d3.csv("self_export-test_299-session390-29-06-2018_14_52_37.csv", function(d){
+        var w = 600;
+        var h = 3000;
+        var decal = 200;
+        
+        var mapTemps = d.map(function(i){return parseInt(i["Temps en secondes (pour le test entier)"]);});
+        console.log(mapTemps);
+
+        var canvas = d3.select("body")
+          .append("svg")
+          .attr("width",w)
+          .attr("height",h);
+
+        var widthScale = d3.scale.linear()
+          .domain([0,d3.max(mapTemps)])
+          .range([0,w-50]);
+
+        var colorScale = d3.scale.linear()
+          .domain([0,d3.max(mapTemps)])
+          .range(["blue","red"]);
+
+        canvas.selectAll("rect")
+          .data(mapTemps)
+          .enter()
+            .append("rect")
+            .attr("width",0)
+            .attr("transform","translate("+decal+",0)")
+            .transition()
+            .duration(1500)
+            .attr("width", function (o) {return widthScale(o);})
+            .attr("height", 20)
+            .attr("fill", function(o) {return colorScale(o);})
+            .attr("y", function (o,i) {return i*25;});
+
+        canvas.selectAll(".val")
+          .data(mapTemps)
+          .enter()
+            .append("text")
+            .attr("fill","steelblue")
+            .attr("y", function(o,i) {return i*25+15;})
+            .attr("x",decal)
+            .text(function(o) {return o/60+" min";})
+            .transition()
+            	.duration(1500)
+            	.attr("x",function (o) {return decal+widthScale(o)+5;});
+
+	canvas.selectAll(".nom")
+          .data(d)
+          .enter()
+            .append("text")
+            .attr("fill","black")
+            .attr("y", function(o,i) {return i*25+15;})
+            .attr("x",0)
+            //.attr("transform","translate(-"+string.length(function(o) {return o["Prénom"]+" "+o["Nom"];})+",0)")
+            // afficher en fonction de la longueur du nom (str.length(prénom+nom))
+            .text(function(o) {return o["Prénom"]+" "+o["Nom"];});
+	
+      })
+
+
+    </script>
+
+  </body>
+
+</html>
